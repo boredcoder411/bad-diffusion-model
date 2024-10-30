@@ -3,7 +3,8 @@ import torch.nn as nn
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-from keras.datasets.fashion_mnist import load_data
+#from keras.datasets.fashion_mnist import load_data
+from keras.src.datasets.cifar10 import load_data
 from unet import UNet
 
 (trainX, trainy), (testX, testy) = load_data()
@@ -51,7 +52,7 @@ class DiffusionModel:
         return loss.item()
 
     @torch.no_grad()
-    def sampling(self, n_samples=1, image_channels=1, img_size=(32, 32),
+    def sampling(self, n_samples=1, image_channels=3, img_size=(32, 32),
                  use_tqdm=True):
         """
         Algorithm 2 in Denoising Diffusion Probabilistic Models
@@ -85,8 +86,11 @@ if __name__ == "__main__":
     # Training
     for epoch in tqdm(range(40_000)):
         loss = diffusion_model.training(batch_size, optimizer)
+    
+    # Save model
+    torch.save(model.state_dict(), 'model.pth')
 
-    # Plot results
+    """# Plot results
     nb_images = 81
     samples = diffusion_model.sampling(n_samples=nb_images, use_tqdm=False)
     plt.figure(figsize=(17, 17))
@@ -95,7 +99,4 @@ if __name__ == "__main__":
         plt.axis('off')
         plt.imshow(samples[i].squeeze(0).clip(0, 1).data.cpu().numpy(),
                    cmap='gray')
-    plt.savefig(f'Imgs/samples.png')
-
-    # Save model
-    torch.save(model.state_dict(), 'model.pth')
+    plt.savefig(f'Imgs/samples.png')"""
