@@ -18,4 +18,4 @@ $ python3 diffusion_models.py
 
 
 
- ![](Imgs/samples.png)
+ ![](samples.png)
