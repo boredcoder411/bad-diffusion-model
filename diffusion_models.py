@@ -11,11 +11,15 @@ from unet import UNet
 trainX = np.float32(trainX) / 255.
 testX = np.float32(testX) / 255.
 
+# Ensure the shape is (N, C, H, W)
+trainX = trainX.transpose(0, 3, 1, 2)  # Change to (num_samples, channels, height, width)
+testX = testX.transpose(0, 3, 1, 2)  # Change to (num_samples, channels, height, width)
+
 
 def sample_batch(batch_size, device):
     indices = torch.randperm(trainX.shape[0])[:batch_size]
-    data = torch.from_numpy(trainX[indices]).unsqueeze(1).to(device)
-    return torch.nn.functional.interpolate(data, 32)
+    data = torch.from_numpy(trainX[indices]).to(device)  # Shape: [batch_size, 3, 32, 32]
+    return data
 
 
 class DiffusionModel:
@@ -89,14 +93,3 @@ if __name__ == "__main__":
     
     # Save model
     torch.save(model.state_dict(), 'model.pth')
-
-    """# Plot results
-    nb_images = 81
-    samples = diffusion_model.sampling(n_samples=nb_images, use_tqdm=False)
-    plt.figure(figsize=(17, 17))
-    for i in range(nb_images):
-        plt.subplot(9, 9, 1 + i)
-        plt.axis('off')
-        plt.imshow(samples[i].squeeze(0).clip(0, 1).data.cpu().numpy(),
-                   cmap='gray')
-    plt.savefig(f'Imgs/samples.png')"""

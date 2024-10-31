@@ -147,7 +147,7 @@ class AttentionBlock(nn.Module):
 
 class UNet(nn.Module):
 
-    def __init__(self, ch=128, in_ch=1):
+    def __init__(self, ch=128, in_ch=3):
         super(UNet, self).__init__()
 
         self.ch = ch
