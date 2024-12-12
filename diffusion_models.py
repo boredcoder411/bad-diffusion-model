@@ -7,9 +7,14 @@ import matplotlib.pyplot as plt
 from keras.src.datasets.cifar10 import load_data
 from unet import UNet
 
-(trainX, trainy), (testX, testy) = load_data()
+(trainX, _), (testX, _) = load_data()
 trainX = np.float32(trainX) / 255.
 testX = np.float32(testX) / 255.
+
+# print the labels
+print(trainX.shape)
+
+exit()
 
 # Ensure the shape is (N, C, H, W)
 trainX = trainX.transpose(0, 3, 1, 2)  # Change to (num_samples, channels, height, width)
